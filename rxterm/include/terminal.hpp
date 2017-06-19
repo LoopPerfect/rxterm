@@ -13,16 +13,14 @@ struct VirtualTerminal {
   std::string buffer;
 
   void reset() {
-    unsigned n = std::count(buffer.begin(), buffer.end(), '\n');
-    std::cout << clearLines(n);
-    std::cout.flush();
+    unsigned n = std::count(buffer.begin(), buffer.end(), '\n')+1;
+    std::cout << clearLines(n) << std::endl;
     buffer = "";
   }
 
   void flip(std::string s) {
     reset();
-    std::cout << s;
-    std::cout.flush();
+    std::cout << s << std::endl;
     buffer = s;
   }
 };
