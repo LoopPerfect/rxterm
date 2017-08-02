@@ -57,6 +57,12 @@ constexpr std::string computeMod(X x, Xs...xs) {
   return (r == "") ? "" : "\e["+r+"m";
 }
 
+constexpr Font fonts (){
+  return Font::None;
+}
+
+
+
 template<class X>
 constexpr Font fonts (X x){
   return x;
@@ -80,11 +86,14 @@ struct Style {
   Color fg;
   Font font;
 
+  template<class...Fonts>
   constexpr Style(
       Color bg = Color::Inherit,
       Color fg = Color::Inherit,
-      Font font = Font::Inherit)
-    : bg{bg}, fg{fg}, font{font}
+      Fonts...fs)
+    : bg{bg}
+    , fg{fg}
+    , font{fonts(fs...)}
   {}
 
 
@@ -126,7 +135,7 @@ struct Style {
     return ((int)fg<10) ? std::to_string(30 + (int)fg) : "";
   }
 
-  std::string render() const {
+  std::string toString() const {
     return computeMod(
         defaultMod(),
         boldMod(),
@@ -149,12 +158,12 @@ Style diff(Style const& a, Style const& b=Style{} ) {
 
   int l = (int)a.font;
   int r = (int)b.font;
-  int reset =  (l & ~r)? 1 : 0;
+  bool reset =  (l & ~r)? 1 : 0;
 
   return Style {
-    keepBG ? Color::Inherit : b.bg,
-    keepFG ? Color::Inherit : b.fg,
-    keepFont ? Font::Inherit : (Font)((r&(l^r))|reset)
+    (keepBG && !reset) ? Color::Inherit : b.bg,
+    (keepFG && !reset) ? Color::Inherit : b.fg,
+    (keepFont && !reset) ? Font::Inherit : (Font)((r&((l&r)^r))|reset)
   };
 }
 

@@ -4,40 +4,13 @@
 #include <memory>
 #include <rxterm/terminal.hpp>
 #include <rxterm/style.hpp>
+#include <rxterm/image.hpp>
+#include <rxterm/reflow.hpp>
+#include <rxterm/components/text.hpp>
+#include <rxterm/components/stacklayout.hpp>
+#include <rxterm/components/flowlayout.hpp>
 
-std::string reflow(unsigned width, std::string const& s) {
-
-  if (width == 0) return "";
-  if (s.size() <= width) { return s; }
-
-  std::string content = "";
-  auto b = 0;
-  while (b < s.size()) {
-    auto t = s.substr(b, width+1)
-      .find_last_of("\n\t.,!?:;- ");
-
-    if (t == std::string::npos) {
-      content += s.substr(b, width);
-      b += width;
-      if (b < s.size()) {
-        content += '\n';
-      }
-    } else {
-      if (s[t] == '\n') {
-        content += s.substr(b, t);
-        b = t+1;
-      } else if (t >= width) {
-        content += s.substr(b, width) + '\n';
-        b += width;
-      } else {
-        content += s.substr(b, t+1) + '\n';
-        b += t+1;
-      }
-    }
-  }
-
-  return content;
-}
+using namespace rxterm;
 
 struct Content {
   std::string content;
@@ -50,42 +23,50 @@ struct Content {
 
 auto renderToTerm = [](auto vt, auto const& c) {
   //TODO: get actual terminal width
-  vt.flip(c.render(80));
+  vt.flip(c.toString());
   return vt;
 };
 
 int main() {
   using namespace std::chrono_literals;
   using namespace rxterm;
+  using namespace std::string_literals;
 
-  std::cout << std::endl;
   VirtualTerminal vt;
 
-  auto s = reflow(4, "12345-abcde-12345-ab");
 
-   auto s1 = Style(Color::White, Color::Green, Font::Crossed);
-   auto s2 = Style(
-       Color::Blue,
-       Color::White,
-       fonts(
-         Font::Underline,
-         Font::Crossed,
-         Font::Italic
-       ));
-
-   auto s3 = Style(
-       Color::Red,
-       Color::Blue,
-       fonts(
-         Font::Bold,
-        // Font::Crossed,
-         Font::Italic
-       ));
+  auto const c1 = FlowLayout<>({
+    Text({
+      Color::Red,
+      Color::Blue},
+      "to stri\nng"s)
+    });
 
 
-  std::cout << s1.render() <<"lol"<< "\e[0m"<<std::endl;
-  std::cout << s2.render() <<"lol"<< "\e[0m"<<std::endl;
-  std::cout << s1.render() << diff(s1, s3).render().substr(1) << std::endl;
+  auto const c2 = StackLayout<>({
+    Text({
+     Color::Red,
+     Color::Blue,
+     Font::Crossed},
+      "to stri\n-ng"s),
+
+    Text({
+      Color::Blue,
+      Color::Green,
+      Font::Crossed},
+      "first\n mult\ni"s),
+  });
+
+
+  auto const img1 = c1.render(100);
+  auto const img2 = c2.render(100);
+
+  vt = renderToTerm(vt, img1);
+  std::this_thread::sleep_for(2s);
+  vt = renderToTerm(vt, img2);
+  std::this_thread::sleep_for(2s);
+  vt = renderToTerm(vt, img1);
+
   return 0;
 }
 
