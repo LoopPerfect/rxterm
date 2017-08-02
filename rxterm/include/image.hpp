@@ -14,7 +14,7 @@ struct Image {
   unsigned width;
   unsigned height;
 
-  static Image create(unsigned const& width, unsigned const& height, Pixel const& pixel = Pixel{'\0', Style{}}) {
+  static Image create(unsigned const& width, unsigned const& height, Pixel const& pixel = Pixel{'\0', Style::None()}) {
     return {
       std::vector<Pixel>(width*height, pixel),
       width,
@@ -39,10 +39,10 @@ struct Image {
     for (int y=0; y < height; ++y) {
       for (int x=0; x < width; ++x) {
         auto const& pixel = (*this)(x, y);
-        auto const current = diff(prev, pixel.c ? pixel.style : Style(Color::Default, Color::Default, Font::Default));
+        auto const current = diff(prev, pixel.c ? pixel.style : Style::Default());
         char c = pixel.c ? pixel.c : ' ';
         str += current.toString() + c;
-        prev = pixel.c != '\0' ? pixel.style : Style();
+        prev = pixel.c != '\0' ? pixel.style : Style::Default();
       }
       str+="\n";
     }

@@ -9,20 +9,18 @@ namespace rxterm {
 
 
 struct Renderable {
-  virtual Image render(unsigned w)const = 0;
+  virtual Image render(unsigned const w)const = 0;
 };
 
 
-auto isImage(Image x){ return x; }
+auto isImage(Image const& x){ return x; }
 
 template<class R>
-auto callOrRender(unsigned const& w, R const& r) -> decltype(isImage(r.render(w))) {
+auto callOrRender(unsigned const w, R const& r) -> decltype(isImage(r.render(w))) {
   return r.render(w);
 }
-
-
 template<class R>
-auto callOrRender(unsigned const& w, R const& r) -> decltype(isImage(r(w))) {
+auto callOrRender(unsigned const w, R const& r) -> decltype(isImage(r(w))) {
   return r(w);
 }
 

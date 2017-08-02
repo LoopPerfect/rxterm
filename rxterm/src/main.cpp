@@ -37,23 +37,23 @@ int main() {
 
   auto const c1 = FlowLayout<>({
     Text({
-      Color::Red,
-      Color::Blue},
+      FgColor::Red,
+      BgColor::Blue},
       "to stri\nng"s)
-    });
+  });
 
 
-  auto const c2 = StackLayout<>({
+  auto const c2 = FlowLayout<>({
     Text({
-     Color::Red,
-     Color::Blue,
+     FgColor::Red,
+     BgColor::Blue,
      Font::Crossed},
       "to stri\n-ng"s),
 
     Text({
-      Color::Blue,
-      Color::Green,
-      Font::Crossed},
+      FgColor::Blue,
+      BgColor::Green,
+      Font::Underline},
       "first\n mult\ni"s),
   });
 
@@ -62,9 +62,9 @@ int main() {
   auto const img2 = c2.render(100);
 
   vt = renderToTerm(vt, img1);
-  std::this_thread::sleep_for(2s);
+  std::this_thread::sleep_for(1s);
   vt = renderToTerm(vt, img2);
-  std::this_thread::sleep_for(2s);
+  std::this_thread::sleep_for(1s);
   vt = renderToTerm(vt, img1);
 
   return 0;

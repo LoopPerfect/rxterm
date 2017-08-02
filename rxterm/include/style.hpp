@@ -23,15 +23,32 @@ enum class Font {
   Inherit = 1 << 11
 };
 
-enum class Color {
-  Black = 0,
-	Red = 1,
-	Green = 2,
-	Yellow = 3,
-	Blue = 4,
-	Magenta = 5,
-	Cyan = 6,
-	White = 7,
+enum class FgColor {
+  None = 0,
+  Black = 1,
+	Red = 2,
+	Green = 3,
+	Yellow = 4,
+	Blue = 5,
+	Magenta = 6,
+	Cyan = 7,
+	White = 8,
+  Default = 9,
+  Transparent = 10,
+  Inherit = 11
+};
+
+
+enum class BgColor {
+  None = 0,
+  Black = 1,
+	Red = 2,
+	Green = 3,
+	Yellow = 4,
+	Blue = 5,
+	Magenta = 6,
+	Cyan = 7,
+	White = 8,
   Default = 9,
   Transparent = 10,
   Inherit = 11
@@ -57,22 +74,46 @@ constexpr std::string computeMod(X x, Xs...xs) {
   return (r == "") ? "" : "\e["+r+"m";
 }
 
-constexpr Font fonts (){
-  return Font::None;
+FgColor isStyle(FgColor x) { return x; }
+BgColor isStyle(BgColor x) { return x; }
+Font isStyle(Font x) { return x; }
+
+FgColor toFgColor(FgColor c) { return c; }
+BgColor toBgColor(BgColor c) { return c; }
+Font toFont(Font f) { return f; }
+
+FgColor toFgColor(...) { return FgColor::None; }
+BgColor toBgColor(...) { return BgColor::None; }
+Font toFont(...) { return Font::None; }
+
+template<class...Xs>
+constexpr FgColor getFgColor (Xs...xs) {
+  return (FgColor)std::max({0, (int)toFgColor(xs)...});
 }
 
-
-
-template<class X>
-constexpr Font fonts (X x){
-  return x;
+template<class...Xs>
+constexpr BgColor getBgColor (Xs...xs) {
+  return (BgColor)std::max({0, (int)toBgColor(xs)...});
 }
+
+constexpr Font getFontStyle(Font f = Font::None) {
+  return f;
+}
+
 
 
 template<class X, class...Xs>
-constexpr Font fonts(X x, Xs...xs) {
-  return Font( ((int)x) | ((int)fonts(xs...))  );
+constexpr Font getFontStyle(X x, Xs...xs) {
+  return Font( ((int)getFontStyle(toFont(x))) | ((int)getFontStyle(toFont(xs)...))  );
 }
+
+
+
+
+
+
+
+
 
 
 bool has(Font x, Font y) {
@@ -82,20 +123,20 @@ bool has(Font x, Font y) {
 
 
 struct Style {
-  Color bg;
-  Color fg;
+  BgColor bg;
+  FgColor fg;
   Font font;
 
-  template<class...Fonts>
+  template<class...Styles>
   constexpr Style(
-      Color bg = Color::Inherit,
-      Color fg = Color::Inherit,
-      Fonts...fs)
-    : bg{bg}
-    , fg{fg}
-    , font{fonts(fs...)}
+    Styles...styles)
+    : bg{getBgColor(isStyle(styles)...)}
+    , fg{getFgColor(isStyle(styles)...)}
+    , font{getFontStyle(isStyle(styles)...)}
   {}
 
+  constexpr static Style None(){ return{}; }
+  constexpr static Style Default(){ return{Font::Default}; }
 
   string defaultMod() const {
     return has(font, Font::Default) ? "0" : "";
@@ -128,11 +169,11 @@ struct Style {
 
 
   string bgMod() const {
-    return ((int)bg<10) ? std::to_string(40 + (int)bg) : "";
+    return ((int)bg<11) ? std::to_string(40 + (int)bg -1) : "";
   }
 
   string fgMod() const {
-    return ((int)fg<10) ? std::to_string(30 + (int)fg) : "";
+    return ((int)fg<11) ? std::to_string(30 + (int)fg -1) : "";
   }
 
   std::string toString() const {
@@ -151,7 +192,7 @@ struct Style {
 };
 
 
-Style diff(Style const& a, Style const& b=Style{} ) {
+Style diff(Style const& a, Style const& b = Style::None() ) {
   bool keepBG = (a.bg == b.bg);
   bool keepFG = (a.fg == b.fg);
   bool keepFont = (a.font == b.font);
@@ -161,25 +202,11 @@ Style diff(Style const& a, Style const& b=Style{} ) {
   bool reset =  (l & ~r)? 1 : 0;
 
   return Style {
-    (keepBG && !reset) ? Color::Inherit : b.bg,
-    (keepFG && !reset) ? Color::Inherit : b.fg,
+    (keepBG && !reset) ? BgColor::Inherit : b.bg,
+    (keepFG && !reset) ? FgColor::Inherit : b.fg,
     (keepFont && !reset) ? Font::Inherit : (Font)((r&((l&r)^r))|reset)
   };
 }
-
-
-Style cascade(Style const& p, Style const& c=Style() ) {
-  bool inheritBG = (c.bg == Color::Inherit);
-  bool inheritFG = (c.fg == Color::Inherit);
-  bool inheritFont = (c.font == Font::Inherit);
-
-  return Style {
-    inheritBG ? p.bg : c.bg,
-    inheritFG ? p.fg : c.fg,
-    inheritFont ? p.font : c.font,
-  };
-}
-
 
 }
 
