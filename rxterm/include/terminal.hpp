@@ -13,6 +13,7 @@ struct VirtualTerminal {
   std::string buffer;
 
   void reset() {
+    if(buffer  == "") return;
     unsigned const n = std::count(buffer.begin(), buffer.end(), '\n')+1;
     std::cout << clearLines(n) << std::endl;
     buffer = "";
@@ -20,7 +21,7 @@ struct VirtualTerminal {
 
   void flip(std::string s) {
     reset();
-    std::cout << s;
+    std::cout << s << "\e[0m";
     std::flush(std::cout);
     buffer = s;
   }

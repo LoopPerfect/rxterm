@@ -7,7 +7,6 @@
 #include <rxterm/style.hpp>
 #include <rxterm/reflow.hpp>
 #include <algorithm>
-#include <iostream>
 
 namespace rxterm {
 

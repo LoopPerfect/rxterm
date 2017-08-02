@@ -10,20 +10,12 @@
 #include <rxterm/components/stacklayout.hpp>
 #include <rxterm/components/flowlayout.hpp>
 #include <rxterm/components/progress.hpp>
+#include <rxterm/components/maxwidth.hpp>
 using namespace rxterm;
 
-struct Content {
-  std::string content;
-
-  std::string render(unsigned width)const {
-    return reflow(width, content);
-  }
-};
-
-
-auto renderToTerm = [](auto vt, auto const& c) {
+auto renderToTerm = [](auto vt, unsigned w, auto const& c) {
   //TODO: get actual terminal width
-  vt.flip(c.toString());
+  vt.flip(c.render(w).toString());
   return vt;
 };
 
@@ -35,39 +27,23 @@ int main() {
   VirtualTerminal vt;
 
 
-  auto const c1 = FlowLayout<>({
-    Text({
-      FgColor::Red,
-      BgColor::Blue},
-      "to stri\nng"s)
-  });
 
 
-  auto const c2 = FlowLayout<>({
-    Text({
-     FgColor::Red,
-     BgColor::Green,
-     Font::Crossed},
-      "to stri\n-ng"s),
-
-    Progress(0.5),
-    Text({
-      FgColor::Blue,
-      BgColor::Green,
-      Font::Underline},
-      "first\n mult\ni"s)
-
-  });
-
-
-  auto const img1 = c1.render(100);
-  auto const img2 = c2.render(30);
-
-  vt = renderToTerm(vt, img1);
+  vt = renderToTerm(vt, 30, FlowLayout<>{{
+    MaxWidth(10, Progress(0.1)),
+    MaxWidth(10, Progress(0.2)),
+    MaxWidth(10, Progress(0.3))
+  }});
   std::this_thread::sleep_for(1s);
-  vt = renderToTerm(vt, img2);
+
+  vt = renderToTerm(vt, 30, MaxWidth(30, Progress(0.1)));
   std::this_thread::sleep_for(1s);
-  vt = renderToTerm(vt, img1);
+
+  vt = renderToTerm(vt, 30, Progress(0.3));
+  std::this_thread::sleep_for(1s);
+
+  vt = renderToTerm(vt, 30, Progress(0.4));
+  std::this_thread::sleep_for(1s);
 
   return 0;
 }

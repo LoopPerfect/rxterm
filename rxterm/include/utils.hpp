@@ -43,6 +43,10 @@ std::string repeat(unsigned n, std::string const& s) {
   return result;
 }
 
+std::string clearBeforeCursor() {
+  return "\e[0K";
+}
+
 std::string clearAfterCursor() {
   return "\e[1K";
 }
@@ -58,7 +62,7 @@ std::string moveUp(unsigned n=1) {
 
 
 std::string clearLines(unsigned n=1) {
-  return clearLine() + ((n)?repeat(n, moveUp()+clearLine()): std::string(""));
+  return "\e[0m"+clearBeforeCursor() + ((n)?repeat(n, clearLine()+moveUp()): std::string(""));
 }
 
 }
