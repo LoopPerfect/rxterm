@@ -19,9 +19,15 @@ template<class R>
 auto callOrRender(unsigned const w, R const& r) -> decltype(isImage(r.render(w))) {
   return r.render(w);
 }
+
 template<class R>
 auto callOrRender(unsigned const w, R const& r) -> decltype(isImage(r(w))) {
   return r(w);
+}
+
+template<class R>
+auto callOrRender(unsigned const w, R const& r) -> decltype(isImage( callOrRender(w, r()))) {
+  return callOrRender(w, r());
 }
 
 

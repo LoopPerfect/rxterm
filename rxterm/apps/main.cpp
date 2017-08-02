@@ -27,8 +27,6 @@ int main() {
   VirtualTerminal vt;
 
 
-
-
   vt = renderToTerm(vt, 30, FlowLayout<>{{
     MaxWidth(10, Progress(0.1)),
     MaxWidth(10, Progress(0.2)),
