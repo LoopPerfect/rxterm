@@ -26,12 +26,16 @@ int main() {
 
   VirtualTerminal vt;
 
+  Component superProgressBar = []{
+    return FlowLayout<>{{
+      MaxWidth(10, Progress(0.1)),
+      MaxWidth(10, Progress(0.2)),
+      MaxWidth(10, Progress(0.3))
+    }};
+  };
 
-  vt = renderToTerm(vt, 30, FlowLayout<>{{
-    MaxWidth(10, Progress(0.1)),
-    MaxWidth(10, Progress(0.2)),
-    MaxWidth(10, Progress(0.3))
-  }});
+
+  vt = renderToTerm(vt, 30, superProgressBar);
   std::this_thread::sleep_for(1s);
 
   vt = renderToTerm(vt, 30, MaxWidth(30, Progress(0.1)));
