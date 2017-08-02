@@ -22,7 +22,7 @@ struct FlowLayout {
   {}
 
 
-  Image render(int maxWidth) const {
+  Image render(unsigned const maxWidth) const {
 
     auto const images = map(children, [maxWidth](auto const& c) {
       auto const image = c.render(maxWidth);
@@ -30,33 +30,38 @@ struct FlowLayout {
     });
 
     unsigned width = 0;
-    unsigned curWidth = 0;
+    unsigned x = 0;
     unsigned curHeight = 0;
+    std::vector<unsigned> xs;
     std::vector<unsigned> ys;
-    unsigned baseline = 0;
+    unsigned y = 0;
 
     for (auto const& image : images) {
-      curHeight = std::max(curHeight, image.height);
-      curWidth += image.width;
-
-      ys.push_back(baseline);
-      if (curWidth > maxWidth) {
-        curWidth = 0;
-        baseline += curHeight;
-        curHeight = 0;
+      if (x + image.width > maxWidth) {
+        x = 0;
+        xs.push_back(x);
+        x += image.width;
+        y += curHeight;
+        ys.push_back(y);
+        curHeight = image.height;
+        width = std::max({width, image.width});
+      } else {
+        xs.push_back(x);
+        ys.push_back(y);
+        x += image.width;
+        width = std::max(width, x);
+        curHeight = std::max(curHeight, image.height);
       }
-
-      width = std::max(width, curWidth);
     }
 
-    auto const height = baseline + curHeight;
+    auto const height = y + curHeight;
     auto canvas = Image::create(width, height, bg);
 
-    auto x = 0;
     auto yi = ys.cbegin();
+    auto xi = xs.cbegin();
     for(auto const& image : images) {
-      drawOnBackground(canvas, x, *yi, image);
-      x += image.width;
+      canvas = drawOnBackground(canvas, *xi, *yi, image);
+      ++xi;
       ++yi;
     }
 

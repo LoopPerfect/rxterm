@@ -9,7 +9,7 @@
 #include <rxterm/components/text.hpp>
 #include <rxterm/components/stacklayout.hpp>
 #include <rxterm/components/flowlayout.hpp>
-
+#include <rxterm/components/progress.hpp>
 using namespace rxterm;
 
 struct Content {
@@ -46,20 +46,22 @@ int main() {
   auto const c2 = FlowLayout<>({
     Text({
      FgColor::Red,
-     BgColor::Blue,
+     BgColor::Green,
      Font::Crossed},
       "to stri\n-ng"s),
 
+    Progress(0.5),
     Text({
       FgColor::Blue,
       BgColor::Green,
       Font::Underline},
-      "first\n mult\ni"s),
+      "first\n mult\ni"s)
+
   });
 
 
   auto const img1 = c1.render(100);
-  auto const img2 = c2.render(100);
+  auto const img2 = c2.render(30);
 
   vt = renderToTerm(vt, img1);
   std::this_thread::sleep_for(1s);

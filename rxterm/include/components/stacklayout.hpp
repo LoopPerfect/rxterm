@@ -41,7 +41,7 @@ struct StackLayout {
 
     auto y = 0;
     for(auto const& image : images) {
-      drawOnBackground(canvas, 0, y, image);
+      canvas = drawOnBackground(canvas, 0, y, image);
       y += image.height;
     }
 

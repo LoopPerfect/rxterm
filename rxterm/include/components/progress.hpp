@@ -1,18 +1,36 @@
 #ifndef RXTERM_COMPONENTS_PROGRESS_HPP
 #define RXTERM_COMPOMEMTS_PROGRESS_HPP
 
+#include <cmath>
 #include <rxterm/style.hpp>
 #include <rxterm/utils.hpp>
+#include <rxterm/image.hpp>
 
 namespace rxterm {
 
+template<class T>
+T clamp(T const l, T const r, T const x) {
+  return std::min(r, std::max(l,x));
+}
+
 struct Progress {
-  float progress;
+  float const progress;
+  Pixel const bg;
+  Pixel const fg;
 
-  Progress(float p) : progress{p} {};
+  Progress(float const p,
+    Pixel const& bg = Pixel{' ', {BgColor::Cyan}},
+    Pixel const& fg = Pixel{' ', {BgColor::Blue}})
+    : progress{p}
+    , bg{bg}
+    , fg{fg} {};
 
-  std::string render(unsigned width)const {
-    return std::string("\e[31m") + repeat(width*progress, "#") + "\e[49m\n";
+  Image render(unsigned const width)const {
+    auto const p = clamp(0.0f, 1.0f,progress);
+    return drawOnBackground(
+      Image::create(width, 1, bg),
+      0, 0,
+      Image::create(width*p, 1, fg));
   }
 };
 

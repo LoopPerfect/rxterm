@@ -14,6 +14,20 @@ struct Image {
   unsigned width;
   unsigned height;
 
+  Image(
+    std::vector<Pixel> const& pixels,
+    unsigned const width,
+    unsigned const height)
+    : pixels{pixels}
+    , width{width}
+    , height{height}
+  {}
+
+  Image() = default;
+  Image(Image const&) = default;
+  Image& operator=(Image const&) = default;
+
+
   static Image create(unsigned const& width, unsigned const& height, Pixel const& pixel = Pixel{'\0', Style::None()}) {
     return {
       std::vector<Pixel>(width*height, pixel),
@@ -21,6 +35,8 @@ struct Image {
       height
     };
   }
+
+
 
   Pixel const& operator()(int x, int y)const {
     return pixels[y*width+x];
@@ -50,7 +66,7 @@ struct Image {
   }
 };
 
-Image drawOnBackground(Image& canvas, unsigned const& sx, unsigned const& sy, Image const& fg) {
+Image drawOnBackground(Image canvas, unsigned const& sx, unsigned const& sy, Image const& fg) {
   for(int y=0; y < fg.height; ++y) {
     for(int x=0; x < fg.width; ++x) {
       auto& p = canvas(sx+x, sy+y);
