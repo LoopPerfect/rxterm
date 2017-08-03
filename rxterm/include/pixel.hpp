@@ -4,14 +4,16 @@
 #include <string>
 
 namespace rxterm {
-  struct Pixel {
-    char c ='\0';
-    Style style;
 
-    std::string toString()const {
-      return style.toString() + c;
-    }
-  };
+struct Pixel {
+  char c ='\0';
+  Style style;
+
+  std::string toString()const {
+    return style.toString() + c;
+  }
+};
+
 }
 
 

@@ -8,8 +8,8 @@
 namespace rxterm {
 
 struct MaxWidth {
-  unsigned maxWidth;
-  Component c;
+  unsigned const maxWidth;
+  Component const c;
 
   MaxWidth(unsigned const maxWidth, Component const& c)
     : maxWidth{maxWidth}

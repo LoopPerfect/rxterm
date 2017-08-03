@@ -13,7 +13,7 @@
 #include <rxterm/components/maxwidth.hpp>
 using namespace rxterm;
 
-auto renderToTerm = [](auto vt, unsigned w, auto const& c) {
+auto renderToTerm = [](auto vt, unsigned w, Component const& c) {
   //TODO: get actual terminal width
   vt.flip(c.render(w).toString());
   return vt;
@@ -26,26 +26,18 @@ int main() {
 
   VirtualTerminal vt;
 
-  Component superProgressBar = []{
+  auto superProgressBar = [](auto x, auto y, auto z){
     return FlowLayout<>{{
-      MaxWidth(10, Progress(0.1)),
-      MaxWidth(10, Progress(0.2)),
-      MaxWidth(10, Progress(0.3))
+      MaxWidth(20, Progress(x)),
+      MaxWidth(20, Progress(y)),
+      MaxWidth(20, Progress(z))
     }};
   };
 
-
-  vt = renderToTerm(vt, 30, superProgressBar);
-  std::this_thread::sleep_for(1s);
-
-  vt = renderToTerm(vt, 30, MaxWidth(30, Progress(0.1)));
-  std::this_thread::sleep_for(1s);
-
-  vt = renderToTerm(vt, 30, Progress(0.3));
-  std::this_thread::sleep_for(1s);
-
-  vt = renderToTerm(vt, 30, Progress(0.4));
-  std::this_thread::sleep_for(1s);
+  for(int i=0; i<101; ++i) {
+    vt = renderToTerm(vt, 60, superProgressBar(0.01*i, 0.02*i, 0.03*i));
+    std::this_thread::sleep_for(20ms);
+  }
 
   return 0;
 }

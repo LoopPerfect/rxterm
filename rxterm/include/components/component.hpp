@@ -25,11 +25,6 @@ auto callOrRender(unsigned const w, R const& r) -> decltype(isImage(r(w))) {
   return r(w);
 }
 
-template<class R>
-auto callOrRender(unsigned const w, R const& r) -> decltype(isImage( callOrRender(w, r()))) {
-  return callOrRender(w, r());
-}
-
 
 struct Component : Renderable {
 
@@ -45,7 +40,7 @@ struct Component : Renderable {
 
   template<class T>
   struct Model : Renderable {
-    T const& model;
+    T const model;
 
     Model(T const& data) : model{data} {}
 

@@ -23,10 +23,11 @@ struct Progress {
     Pixel const& fg = Pixel{' ', {BgColor::Blue}})
     : progress{p}
     , bg{bg}
-    , fg{fg} {};
+    , fg{fg}
+  {}
 
   Image render(unsigned const width)const {
-    auto const p = clamp(0.0f, 1.0f,progress);
+    auto const p = clamp(0.0f, 1.0f, progress);
     return drawOnBackground(
       Image::create(width, 1, bg),
       0, 0,
