@@ -4,9 +4,9 @@
 #include <string>
 #include <memory>
 #include <rxterm/image.hpp>
+#include <rxterm/components/text.hpp>
 
 namespace rxterm {
-
 
 struct Renderable {
   virtual Image render(unsigned const w)const = 0;
@@ -16,14 +16,25 @@ struct Renderable {
 auto isImage(Image const& x){ return x; }
 
 template<class R>
-auto callOrRender(unsigned const w, R const& r) -> decltype(isImage(r.render(w))) {
+auto getImage(unsigned const w, R const& r) -> decltype(isImage(r.render(w))) {
   return r.render(w);
 }
 
 template<class R>
-auto callOrRender(unsigned const w, R const& r) -> decltype(isImage(r(w))) {
+auto getImage(unsigned const w, R const& r) -> decltype(isImage(r(w))) {
   return r(w);
 }
+
+template<class R>
+auto getImage(unsigned const w, R const& r) -> decltype(isImage(r)) {
+  return r(w);
+}
+
+template<class R>
+auto getImage(unsigned const w, R const& r) -> decltype(Text{{},toString(r)}.render(w)) {
+  return Text{{}, toString(r)}.render(w);
+}
+
 
 
 struct Component : Renderable {
@@ -45,7 +56,7 @@ struct Component : Renderable {
     Model(T const& data) : model{data} {}
 
     virtual Image render(unsigned const w)const override{
-      return callOrRender(w, model);
+      return getImage(w, model);
     }
   };
 

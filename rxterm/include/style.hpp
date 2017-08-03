@@ -23,7 +23,7 @@ enum class Font {
   Inherit = 1 << 11
 };
 
-enum class FgColor {
+enum class FontColor {
   None = 0,
   Black = 1,
 	Red = 2,
@@ -39,7 +39,7 @@ enum class FgColor {
 };
 
 
-enum class BgColor {
+enum class Color {
   None = 0,
   Black = 1,
 	Red = 2,
@@ -74,26 +74,26 @@ constexpr std::string computeMod(X x, Xs...xs) {
   return (r == "") ? "" : "\e["+r+"m";
 }
 
-FgColor isStyle(FgColor x) { return x; }
-BgColor isStyle(BgColor x) { return x; }
+FontColor isStyle(FontColor x) { return x; }
+Color isStyle(Color x) { return x; }
 Font isStyle(Font x) { return x; }
 
-FgColor toFgColor(FgColor c) { return c; }
-BgColor toBgColor(BgColor c) { return c; }
+FontColor toFontColor(FontColor c) { return c; }
+Color toColor(Color c) { return c; }
 Font toFont(Font f) { return f; }
 
-FgColor toFgColor(...) { return FgColor::None; }
-BgColor toBgColor(...) { return BgColor::None; }
+FontColor toFontColor(...) { return FontColor::None; }
+Color toColor(...) { return Color::None; }
 Font toFont(...) { return Font::None; }
 
 template<class...Xs>
-constexpr FgColor getFgColor (Xs...xs) {
-  return (FgColor)std::max({0, (int)toFgColor(xs)...});
+constexpr FontColor getFontColor (Xs...xs) {
+  return (FontColor)std::max({0, (int)toFontColor(xs)...});
 }
 
 template<class...Xs>
-constexpr BgColor getBgColor (Xs...xs) {
-  return (BgColor)std::max({0, (int)toBgColor(xs)...});
+constexpr Color getColor (Xs...xs) {
+  return (Color)std::max({0, (int)toColor(xs)...});
 }
 
 constexpr Font getFontStyle(Font f = Font::None) {
@@ -108,30 +108,20 @@ constexpr Font getFontStyle(X x, Xs...xs) {
 }
 
 
-
-
-
-
-
-
-
-
 bool has(Font x, Font y) {
   return (((int)x) & ((int)y));
 }
 
-
-
 struct Style {
-  BgColor bg;
-  FgColor fg;
+  Color bg;
+  FontColor fg;
   Font font;
 
   template<class...Styles>
   constexpr Style(
     Styles...styles)
-    : bg{getBgColor(isStyle(styles)...)}
-    , fg{getFgColor(isStyle(styles)...)}
+    : bg{getColor(isStyle(styles)...)}
+    , fg{getFontColor(isStyle(styles)...)}
     , font{getFontStyle(isStyle(styles)...)}
   {}
 
@@ -202,8 +192,8 @@ Style diff(Style const& a, Style const& b = Style::None() ) {
   bool reset =  (l & ~r)? 1 : 0;
 
   return Style {
-    (keepBG && !reset) ? BgColor::Inherit : b.bg,
-    (keepFG && !reset) ? FgColor::Inherit : b.fg,
+    (keepBG && !reset) ? Color::Inherit : b.bg,
+    (keepFG && !reset) ? FontColor::Inherit : b.fg,
     (keepFont && !reset) ? Font::Inherit : (Font)((r&((l&r)^r))|reset)
   };
 }

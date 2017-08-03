@@ -26,17 +26,20 @@ int main() {
 
   VirtualTerminal vt;
 
-  auto superProgressBar = [](auto x, auto y, auto z){
-    return FlowLayout<>{{
-      MaxWidth(20, Progress(x)),
-      MaxWidth(20, Progress(y)),
-      MaxWidth(20, Progress(z))
-    }};
+  auto superProgressBar = [](auto x, auto y, auto z) -> FlowLayout<> {
+    return {
+      Text("3 segment progressbar: "),
+      FlowLayout<>{
+        MaxWidth(20, Progress(x)),
+        MaxWidth(20, Progress(y)),
+        MaxWidth(20, Progress(z))
+      }
+    };
   };
 
   for(int i=0; i<101; ++i) {
-    vt = renderToTerm(vt, 60, superProgressBar(0.01*i, 0.02*i, 0.03*i));
-    std::this_thread::sleep_for(20ms);
+    vt = renderToTerm(vt, 80, superProgressBar(0.01*i, 0.02*i, 0.03*i));
+    std::this_thread::sleep_for(200ms);
   }
 
   return 0;

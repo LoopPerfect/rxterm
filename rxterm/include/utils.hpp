@@ -7,6 +7,16 @@
 
 namespace rxterm {
 
+auto toString(std::string const& x) -> std::string {
+  return x;
+}
+
+template<class T>
+auto toString(T const& x) -> decltype(std::to_string(x)) {
+  return std::to_string(x);
+}
+
+
 std::vector<std::string> split(std::string const& str, const std::string& delimiter = "\n") {
   std::vector<std::string> tokens;
 

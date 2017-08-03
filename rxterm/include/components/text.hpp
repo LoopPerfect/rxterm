@@ -1,5 +1,5 @@
 #ifndef RXTERM_COMPONENTS_TEXT_HPP
-#define RXTERM_COMPOMEMTS_TEXT_HPP
+#define RXTERM_COMPONENTS_TEXT_HPP
 
 #include <rxterm/image.hpp>
 #include <rxterm/utils.hpp>
@@ -10,28 +10,31 @@
 
 namespace rxterm {
 
+
 struct Text {
   Style const style;
   std::string const content;
 
-
-  Text(Style const& style, std::string const& content)
+  template<class T>
+  Text(Style const& style, T const& content)
     : style{style}
-    , content{content}
+    , content{toString(content)}
   {}
 
-
-  Text(std::string const& content)
+  template<class T>
+  Text(T const& content)
     : style{Style{}}
-    , content{content}
+    , content{toString(content)}
   {}
-
 
   Image render(unsigned const maxWidth) const {
     auto const lines = split(reflow(maxWidth, content), "\n");
     auto const height = lines.size();
-    auto const width = std::max_element(lines.begin(), lines.end(), [](auto const& a, auto const& b){
-      return a.size() < b.size();
+    auto const width = std::max_element(
+      lines.begin(),
+      lines.end(),
+      [](auto const& a, auto const& b){
+        return a.size() < b.size();
     })->size();
 
     auto image = Image::create(width, height, Pixel{'\0', style});
@@ -46,9 +49,6 @@ struct Text {
     return image;
   }
 
-  std::string toString()const {
-    return style.toString() + content;
-  }
 };
 
 }

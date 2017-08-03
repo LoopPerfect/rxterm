@@ -20,6 +20,18 @@ struct StackLayout {
     , bg{bg}
   {}
 
+  template<class...Xs>
+  StackLayout(Xs const&...xs)
+    : children{xs...}
+    , bg{Pixel{}}
+  {}
+
+  template<class...Xs>
+  StackLayout(Pixel const& bg, Xs const&...xs)
+    : children{xs...}
+    , bg{bg}
+  {}
+
   Image render(int maxWidth) const {
     auto const images = map(children, [maxWidth](auto const& c) {
       return c.render(maxWidth);

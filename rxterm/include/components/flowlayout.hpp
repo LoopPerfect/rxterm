@@ -20,6 +20,17 @@ struct FlowLayout {
     , bg{bg}
   {}
 
+  template<class...Xs>
+  FlowLayout(Xs const&...xs)
+    : children{xs...}
+    , bg{Pixel{}}
+  {}
+
+  template<class...Xs>
+  FlowLayout(Pixel const& bg, Xs const&...xs)
+    : children{xs...}
+    , bg{bg}
+  {}
 
   Image render(unsigned const maxWidth) const {
 
