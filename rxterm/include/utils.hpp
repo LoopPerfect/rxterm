@@ -66,13 +66,13 @@ std::string clearLine() {
 }
 
 
-std::string moveUp(unsigned n=1) {
-  return "\e["+std::to_string(n)+"A\r";
+std::string moveUp(unsigned n = 1) {
+  return "\e["+std::to_string(n) + "A\r";
 }
 
 
-std::string clearLines(unsigned n=1) {
-  return "\e[0m"+clearBeforeCursor() + ((n)?repeat(n, clearLine()+moveUp()): std::string(""));
+std::string clearLines(unsigned n = 1) {
+  return "\e[0m" + clearBeforeCursor() + ((n) ? repeat(n, clearLine() + moveUp()) : std::string(""));
 }
 
 }

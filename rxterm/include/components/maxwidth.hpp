@@ -1,5 +1,5 @@
-#ifndef RXTERM_COMPONENTS_FLOWLAYOUT_HPP
-#define RXTERM_COMPOMEMTS_FLOWLAYOUT_HPP
+#ifndef RXTERM_COMPONENTS_MAXWIDTH_HPP
+#define RXTERM_COMPONENTS_MAXWIDTH_HPP
 
 #include <rxterm/image.hpp>
 #include <rxterm/components/component.hpp>

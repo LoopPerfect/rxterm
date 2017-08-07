@@ -1,5 +1,5 @@
 #ifndef RXTERM_COMPONENTS_STACKLAYOUT_HPP
-#define RXTERM_COMPOMEMTS_STACKLAYOUT_HPP
+#define RXTERM_COMPONENTS_STACKLAYOUT_HPP
 
 #include <algorithm>
 #include <rxterm/image.hpp>

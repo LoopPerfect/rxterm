@@ -2,6 +2,6 @@
   "name": "rxterm",
   "dependencies": {
     "reactive-extensions/rxcpp": "4.0.0",
-    "ikalnytskyi/termcolor": "0.0.1"
+    "ikalnytskyi/termcolor": "*"
   }
 }
