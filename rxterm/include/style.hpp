@@ -57,21 +57,21 @@ enum class Color {
 
 
 template<class X>
-constexpr std::string composeMod(X x) {
+constexpr auto composeMod(X x) {
   return x;
 }
 
 template<class X, class...Xs>
-constexpr std::string composeMod(X x, Xs...xs) {
+constexpr auto composeMod(X x, Xs...xs) {
   auto const r = composeMod(xs...);
   auto const delim = (r == "") || (x == "") ? "" : ";";
   return x + delim + r;
 }
 
 template<class X, class...Xs>
-constexpr std::string computeMod(X x, Xs...xs) {
+constexpr auto computeMod(X x, Xs...xs) {
   auto const  r = composeMod(x, xs...);
-  return (r == "") ? "" : "\e["+r+"m";
+  return (r == "") ? "" : "\e[" + r + "m";
 }
 
 FontColor isStyle(FontColor x) { return x; }

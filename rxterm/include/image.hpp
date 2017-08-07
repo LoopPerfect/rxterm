@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+
 #include <rxterm/pixel.hpp>
 #include <rxterm/style.hpp>
 

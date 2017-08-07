@@ -1,5 +1,5 @@
 #ifndef RXTERM_COMPONENTS_PROGRESS_HPP
-#define RXTERM_COMPOMEMTS_PROGRESS_HPP
+#define RXTERM_COMPONENTS_PROGRESS_HPP
 
 #include <cmath>
 #include <rxterm/style.hpp>

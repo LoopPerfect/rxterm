@@ -7,21 +7,29 @@ cxx_library(
   srcs = glob([
     'rxterm/src/**/*.cpp',
   ]),
-  headers = subdir_glob([ # private include files
-    ('rxterm/detail', '**/*.h'), # they are only accesible inside the library
+  headers = subdir_glob([
+    ('rxterm/detail', '**/*.h'),
     ('rxterm/detail', '**/*.hpp'),
   ]),
-  exported_headers = subdir_glob([ # public include files
-    ('rxterm/include', '**/*.h'), # those will be exported
-    ('rxterm/include', '**/*.hpp'), # and accessible via <rxterm/header.h>
+  exported_headers = subdir_glob([
+    ('rxterm/include', '**/*.h'),
+    ('rxterm/include', '**/*.hpp'),
   ]),
   deps = BUCKAROO_DEPS,
-  visibility = ['PUBLIC']
+  licenses = [
+    'LICENSE',
+  ],
+  visibility = [
+    'PUBLIC'
+  ],
 )
 
 cxx_binary(
   name = 'main',
-  srcs = ['rxterm/apps/main.cpp'],
-  deps = [':rxterm'],
-  visibility = ['PUBLIC']
+  srcs = [
+    'rxterm/apps/main.cpp'
+  ],
+  deps = [
+    ':rxterm',
+  ],
 )
