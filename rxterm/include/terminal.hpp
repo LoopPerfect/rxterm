@@ -12,18 +12,20 @@ namespace rxterm {
 struct VirtualTerminal {
   std::string buffer;
 
-  void reset() {
-    if(buffer  == "") return;
+  std::string computeTransition(std::string const& next) {
+    if(buffer == next) return "";
     unsigned const n = std::count(buffer.begin(), buffer.end(), '\n')+1;
-    std::cout << clearLines(n) << std::endl;
-    buffer = "";
+    return clearLines(n) + "\e[0m;" + next;
   }
+  
+  static std::string hide() { return "\e[0;8m"; }
 
-  void flip(std::string s) {
-    reset();
-    std::cout << s << "\e[0m";
+  VirtualTerminal flip(std::string const& next) {
+    auto const& transition = computeTransition(next);
+    if(transition == "") return *this;
+    std::cout << transition << hide();
     std::flush(std::cout);
-    buffer = s;
+    return {next};
   }
 };
 
