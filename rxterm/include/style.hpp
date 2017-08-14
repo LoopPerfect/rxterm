@@ -5,7 +5,7 @@
 
 namespace rxterm {
 
-  using std::string;
+using std::string;
 
 enum class Font {
   None = 0,
@@ -26,13 +26,13 @@ enum class Font {
 enum class FontColor {
   None = 0,
   Black = 1,
-	Red = 2,
-	Green = 3,
-	Yellow = 4,
-	Blue = 5,
-	Magenta = 6,
-	Cyan = 7,
-	White = 8,
+  Red = 2,
+  Green = 3,
+  Yellow = 4,
+  Blue = 5,
+  Magenta = 6,
+  Cyan = 7,
+  White = 8,
   Default = 9,
   Transparent = 10,
   Inherit = 11
@@ -42,13 +42,13 @@ enum class FontColor {
 enum class Color {
   None = 0,
   Black = 1,
-	Red = 2,
-	Green = 3,
-	Yellow = 4,
-	Blue = 5,
-	Magenta = 6,
-	Cyan = 7,
-	White = 8,
+  Red = 2,
+  Green = 3,
+  Yellow = 4,
+  Blue = 5,
+  Magenta = 6,
+  Cyan = 7,
+  White = 8,
   Default = 9,
   Transparent = 10,
   Inherit = 11
