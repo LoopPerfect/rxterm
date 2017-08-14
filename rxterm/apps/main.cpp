@@ -15,10 +15,9 @@
 
 using namespace rxterm;
 
-auto renderToTerm = [](auto vt, unsigned w, Component const& c) {
+auto renderToTerm = [](auto const& vt, unsigned const w, Component const& c) {
   // TODO: get actual terminal width
-  vt.flip(c.render(w).toString());
-  return vt;
+  return vt.flip(c.render(w).toString());
 };
 
 int main() {
