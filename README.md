@@ -1,4 +1,4 @@
-# rxterm
+# RxTerm ⚡⌨️
 
 A C++ library for functional-reactive terminals. rxterm is a lean alternative to ncurses for many applications.
 
@@ -28,3 +28,14 @@ buckaroo install github+loopperfect/rxterm
 ```
 
 Refer to `rxterm/apps/main.cpp` for an example.
+
+
+## Progress
+
+ * [x] ANSI Output
+ * [x] Reusable components
+ * [ ] Managed console input 
+ * [ ] Terminal width detection
+ * [ ] Windows support
+
+Contributions are very welcome! 💖
