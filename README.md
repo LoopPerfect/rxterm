@@ -2,6 +2,7 @@
 
 A C++ library for functional-reactive terminals. RxTerm is a lean alternative to ncurses for many applications.
 
+![terminal](https://cdn-images-1.medium.com/max/800/1*G897-DuUI_0q6W9VKcIjZg.gif)
 
 ## Build Instructions
 
