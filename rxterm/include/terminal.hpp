@@ -21,7 +21,7 @@ struct VirtualTerminal {
   static std::string hide() { return "\e[0;8m"; }
 
   VirtualTerminal flip(std::string const& next) const {
-    auto const& transition = computeTransition(next);
+    auto const transition = computeTransition(next);
     if(transition == "") return *this;
     std::cout << transition << hide();
     std::flush(std::cout);
