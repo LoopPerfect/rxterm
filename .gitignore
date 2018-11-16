@@ -1,7 +1,7 @@
+/buck-out/
+/.buckd/
+/buckaroo/
 .buckconfig.local
-.buckd
-buck-out
 BUCKAROO_DEPS
-buckaroo
-buckaroo-stacktrace.log
-
+**/build
+**/*exe
