@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 
 class RxtermConan(ConanFile):
-    name = "simplendian"
+    name = "rxterm"
     version = "0.0.1"
     license = "MIT"
     author = "LoopPerfect hello@loopperfect.com"
