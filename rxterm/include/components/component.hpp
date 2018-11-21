@@ -27,11 +27,11 @@ auto getImage(unsigned const w, R const& r) -> decltype(isImage(r(w))) {
 
 template<class R>
 auto getImage(unsigned const w, R const& r) -> decltype(isImage(r)) {
-  return r(w);
+  return w;
 }
 
 template<class R>
-auto getImage(unsigned const w, R const& r) -> decltype(Text{{},toString(r)}.render(w)) {
+auto getImage(unsigned const w, R const& r) -> decltype(Text{{}, toString(r)}.render(w)) {
   return Text{{}, toString(r)}.render(w);
 }
 
