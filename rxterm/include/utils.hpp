@@ -75,6 +75,11 @@ std::string clearLines(unsigned n = 1) {
   return "\e[0m" + clearBeforeCursor() + ((n) ? repeat(n, clearLine() + moveUp()) : std::string(""));
 }
 
+template <typename T>
+T clip(const T& n, const T& lower, const T& upper) {
+  return std::max(lower, std::min(n, upper));
+}
+
 }
 
 #endif

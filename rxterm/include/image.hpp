@@ -6,6 +6,7 @@
 
 #include <rxterm/pixel.hpp>
 #include <rxterm/style.hpp>
+#include <rxterm/utils.hpp>
 
 namespace rxterm {
 
@@ -67,10 +68,19 @@ struct Image {
   }
 };
 
+struct Sprite {
+  Image image;
+  int x = 0;
+  int y = 0;
+};
+
 Image drawOnBackground(Image canvas, unsigned const& sx, unsigned const& sy, Image const& fg) {
-  for(int y=0; y < fg.height; ++y) {
-    for(int x=0; x < fg.width; ++x) {
-      auto& p = canvas(sx+x, sy+y);
+  for (int y=0; y < fg.height; ++y) {
+    for (int x=0; x < fg.width; ++x) {
+      auto& p = canvas(
+        clip(sx+x, 0u, canvas.width), 
+        clip(sy+y, 0u, canvas.height)
+      );
       auto const& q = fg(x, y);
       p = Pixel{
         (q.c)? q.c : p.c,
@@ -82,6 +92,31 @@ Image drawOnBackground(Image canvas, unsigned const& sx, unsigned const& sy, Ima
       };
     }
   }
+  return canvas;
+}
+
+Image drawOnBackground(Image canvas, Sprite const& s) {
+  return drawOnBackground(canvas, s.x, s.y, s.image);
+}
+
+Image drawOnBackground(Image const& canvas) {
+  return canvas;
+}
+
+template<class X, class...Xs>
+auto drawOnBackground(Image const& canvas, X const& s, Xs const&...xs) 
+  -> decltype( s.image, s.x, s.y , drawOnBackground(canvas, xs...)) {
+  return drawOnBackground(
+    drawOnBackground(canvas, s),
+    xs...
+  );
+}
+
+Image drawOnBackground(Image canvas, std::vector<Sprite> const& sprites) {
+  for (auto const& s: sprites) {
+    canvas = drawOnBackground(canvas, s);
+  }
+
   return canvas;
 }
 
