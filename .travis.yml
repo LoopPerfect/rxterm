@@ -1,0 +1,32 @@
+language: cpp
+sudo: true
+dist: trusty
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-6
+      - gcc-6
+
+os:
+  - linux
+  - osx
+
+env:
+  - BUCKAROO_VERSION=buckaroo-redux-alpha-15
+
+cache:
+  directories:
+    - $HOME/.buckaroo/cache
+    - $TRAVIS_BUILD_DIR/bin
+
+osx_image: xcode9.3
+
+before_install:
+  - ./travis/before-install-$TRAVIS_OS_NAME.sh
+
+script:
+  - ./bin/buckaroo install
+  - ./bin/buck build -c ui.superconsole=DISABLED //:rxterm

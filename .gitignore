@@ -1,7 +1,9 @@
 .buckconfig.local
+.buckconfig.d
 .buckd
 buck-out
 BUCKAROO_DEPS
 buckaroo
+buckaroo_macros.bzl
 buckaroo-stacktrace.log
 
