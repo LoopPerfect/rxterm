@@ -26,7 +26,7 @@ buck run :main
 To install this library into your project:
 
 ```bash=
-buckaroo add github.com/loopperfect/rxterm
+buckaroo add github.com/loopperfect/rxterm@*
 ```
 
 Refer to `rxterm/apps/main.cpp` for an example.
