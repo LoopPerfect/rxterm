@@ -41,3 +41,12 @@ Refer to `rxterm/apps/main.cpp` for an example.
  * [ ] Windows support
 
 Contributions are very welcome! 💖
+
+## Windows Support
+
+- VT100 escape sequences are enabled by default in msys2, mingw and cygwin.
+- Cmd.exe and Powershell may require explicit activation of terminal mode. The easiest way is to call system(" ") at the start of your application.
+
+More info:
+https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences
+https://larsfosdal.blog/2018/08/31/did-you-know-that-you-can-enable-vt100-terminal-emulation-in-powershell-as-well-as-the-cmd-window/
