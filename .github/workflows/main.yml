@@ -8,7 +8,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - name: Buck build
-        uses: GuilleDF/buckaroo-action@v1.0.3
-        run: BUCKAROO_USE_BUCK=1 buckaroo install
-        run: buck build //...
+      - uses: GuilleDF/buckaroo-action@v1.0.3
+      - run: BUCKAROO_USE_BUCK=1 buckaroo install
+      - run: buck build //...
