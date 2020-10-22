@@ -6,4 +6,5 @@ BUCKAROO_DEPS
 buckaroo
 buckaroo_macros.bzl
 buckaroo-stacktrace.log
+bazel-*
 

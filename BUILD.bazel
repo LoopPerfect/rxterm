@@ -1,0 +1,21 @@
+cc_library(
+  name = "rxterm",
+  srcs = [],
+  strip_include_prefix = "include",
+  hdrs = glob([
+    "include/**/*.hpp",
+  ]),
+  visibility = [
+    "//visibility:public",
+  ],
+)
+
+cc_binary(
+  name = "main",
+  srcs = [
+    "apps/main.cpp"
+  ],
+  deps = [
+    ":rxterm",
+  ],
+)
