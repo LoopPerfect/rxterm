@@ -10,10 +10,6 @@ cxx_library(
     ('include', '**/*.h'),
     ('include', '**/*.hpp'),
   ]),
-  headers = subdir_glob([
-    ('detail', '**/*.h'),
-    ('detail', '**/*.hpp'),
-  ]),
   licenses = [
     'LICENSE',
   ],
