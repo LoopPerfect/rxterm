@@ -27,10 +27,10 @@ int main() {
 
   VirtualTerminal vt;
 
-  auto superProgressBar = [](auto x, auto y, auto z) -> StackLayout<> {
+  auto superProgressBar = [](auto x, auto y, auto z) -> FlowLayout<> {
     return {
-      Text("3 segment progress-bars: "),
-      StackLayout<>{
+      Text("3 segment progressbar: "),
+      FlowLayout<>{
         MaxWidth(20, Progress(x)),
         MaxWidth(20, Progress(y)),
         MaxWidth(20, Progress(z))
