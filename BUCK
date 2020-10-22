@@ -5,10 +5,14 @@ load('//:buckaroo_macros.bzl', 'buckaroo_deps')
 
 cxx_library(
   name = 'rxterm',
-  header_namespace = '',
+  header_namespace = 'rxterm',
   exported_headers = subdir_glob([
-    ('include', '**/*.h'),
-    ('include', '**/*.hpp'),
+    ('rxterm/include', '**/*.h'),
+    ('rxterm/include', '**/*.hpp'),
+  ]),
+  headers = subdir_glob([
+    ('rxterm/detail', '**/*.h'),
+    ('rxterm/detail', '**/*.hpp'),
   ]),
   licenses = [
     'LICENSE',
@@ -22,7 +26,7 @@ cxx_library(
 cxx_binary(
   name = 'main',
   srcs = [
-    'apps/main.cpp'
+    'rxterm/apps/main.cpp'
   ],
   deps = [
     ':rxterm',
