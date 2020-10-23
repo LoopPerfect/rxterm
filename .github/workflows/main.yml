@@ -9,5 +9,5 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: GuilleDF/buckaroo-action@v1.0.3
-      - run: BUCKAROO_USE_BUCK=1 /bin/buckaroo install
-      - run: buck build //...
+        with: 
+          commands: BUCKAROO_USE_BUCK=1 /bin/buckaroo install && buck build //...
