@@ -5,8 +5,12 @@
 #include <algorithm>
 #include <string>
 
-#ifdef __WIN32
+#ifdef _WIN32
 #include <mutex>
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
 #endif
 
 #include <rxterm/utils.hpp>
@@ -19,10 +23,10 @@ struct VirtualTerminal {
   std::string computeTransition(std::string const& next) const {
     if(buffer == next) return "";
     unsigned const n = std::count(buffer.begin(), buffer.end(), '\n');
-    return clearLines(n) + "\e[0m" + next;
+    return clearLines(n) + "\033[0m" + next;
   }
 
-  static std::string hide() { return "\e[0;8m"; }
+  static std::string hide() { return "\033[0;8m"; }
 
   VirtualTerminal flip(std::string const& next) const {
     auto const transition = computeTransition(next);
@@ -32,7 +36,7 @@ struct VirtualTerminal {
     return {next};
   }
 
-#ifdef __WIN32
+#ifdef _WIN32
   static std::once_flag initInstanceFlag;
   static DWORD initWindowsTerminal() {
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
@@ -57,7 +61,7 @@ struct VirtualTerminal {
 #endif
 };
 
-#ifdef __WIN32
+#ifdef _WIN32
 std::once_flag VirtualTerminal::initInstanceFlag;
 #endif
 }
