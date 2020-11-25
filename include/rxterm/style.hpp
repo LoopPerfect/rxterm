@@ -71,7 +71,7 @@ constexpr auto composeMod(X x, Xs...xs) {
 template<class X, class...Xs>
 constexpr auto computeMod(X x, Xs...xs) {
   auto const  r = composeMod(x, xs...);
-  return (r == "") ? "" : "\e[" + r + "m";
+  return (r == "") ? "" : "\033[" + r + "m";
 }
 
 FontColor isStyle(FontColor x) { return x; }

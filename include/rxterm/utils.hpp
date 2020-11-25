@@ -54,25 +54,25 @@ std::string repeat(unsigned n, std::string const& s) {
 }
 
 std::string clearBeforeCursor() {
-  return "\e[0K";
+  return "\033[0K";
 }
 
 std::string clearAfterCursor() {
-  return "\e[1K";
+  return "\033[1K";
 }
 
 std::string clearLine() {
-  return "\e[2K\r";
+  return "\033[2K\r";
 }
 
 
 std::string moveUp(unsigned n = 1) {
-  return "\e["+std::to_string(n) + "A\r";
+  return "\033["+std::to_string(n) + "A\r";
 }
 
 
 std::string clearLines(unsigned n = 1) {
-  return "\e[0m" + clearBeforeCursor() + ((n) ? repeat(n, clearLine() + moveUp()) : std::string(""));
+  return "\033[0m" + clearBeforeCursor() + ((n) ? repeat(n, clearLine() + moveUp()) : std::string(""));
 }
 
 template <typename T>
