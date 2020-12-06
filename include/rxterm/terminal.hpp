@@ -11,14 +11,46 @@
 #define NOMINMAX
 #endif
 #include <windows.h>
+#else
+#include <sys/ioctl.h>
+#include <unistd.h>
 #endif
 
+#include <utility>
 #include <rxterm/utils.hpp>
 
 namespace rxterm {
 
 struct VirtualTerminal {
   std::string buffer;
+  static unsigned width() {
+    unsigned w;
+#ifdef _WIN32
+    CONSOLE_SCREEN_BUFFER_INFO info;
+    w = (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info))
+      ? info.srWindow.Right - info.srWindow.Left + 1
+      : 0;
+#else
+    winsize ws{};
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
+    w = ws.ws_col;
+#endif
+    return w;
+  }
+  static unsigned height() {
+    unsigned h;
+#ifdef _WIN32
+    CONSOLE_SCREEN_BUFFER_INFO info;
+    h = (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info))
+      ? info.srWindow.Bottom - info.srWindow.Top + 1
+      : 0;
+#else
+      winsize ws{};
+      ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
+      h = ws.ws_row;
+#endif
+    return h;
+  }
 
   std::string computeTransition(std::string const& next) const {
     if(buffer == next) return "";
@@ -30,10 +62,10 @@ struct VirtualTerminal {
 
   VirtualTerminal flip(std::string const& next) const {
     auto const transition = computeTransition(next);
-    if(transition == "") return *this;
+    if(transition.empty()) return *this;
     std::cout << transition << hide();
     std::flush(std::cout);
-    return {next};
+    return VirtualTerminal{next};
   }
 
 #ifdef _WIN32
@@ -42,22 +74,22 @@ struct VirtualTerminal {
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
 #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #endif
-  // Set output mode to handle virtual terminal sequences
-  HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-  if (hOut == INVALID_HANDLE_VALUE) return GetLastError();
-  DWORD dwMode = 0;
-  if (!GetConsoleMode(hOut, &dwMode)) return GetLastError();
-  dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-  if (!SetConsoleMode(hOut, dwMode)) return GetLastError();
-  return ERROR_SUCCESS;
-}
+    // Set output mode to handle virtual terminal sequences
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut == INVALID_HANDLE_VALUE) return GetLastError();
+    DWORD dwMode = 0;
+    if (!GetConsoleMode(hOut, &dwMode)) return GetLastError();
+    dwMode |= DWORD(ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+    if (!SetConsoleMode(hOut, dwMode)) return GetLastError();
+    return ERROR_SUCCESS;
+  }
 
   VirtualTerminal() {
     std::call_once(initInstanceFlag, VirtualTerminal::initWindowsTerminal);
   }
   VirtualTerminal(const VirtualTerminal&) = default;
   VirtualTerminal& operator=(const VirtualTerminal&) = default;
-  VirtualTerminal(const std::string &buf) : buffer{buf} {};
+  explicit VirtualTerminal(std::string buf) : buffer{std::move(buf)} {};
 #endif
 };
 
