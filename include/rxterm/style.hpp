@@ -64,14 +64,14 @@ constexpr auto composeMod(X x) {
 template<class X, class...Xs>
 constexpr auto composeMod(X x, Xs...xs) {
   auto const r = composeMod(xs...);
-  auto const delim = (r == "") || (x == "") ? "" : ";";
+  auto const delim = (r.empty() || x.empty()) ? "" : ";";
   return x + delim + r;
 }
 
 template<class X, class...Xs>
 constexpr auto computeMod(X x, Xs...xs) {
   auto const  r = composeMod(x, xs...);
-  return (r == "") ? "" : "\033[" + r + "m";
+  return (r.empty()) ? "" : "\033[" + r + "m";
 }
 
 FontColor isStyle(FontColor x) { return x; }
@@ -125,8 +125,8 @@ struct Style {
     , font{getFontStyle(isStyle(styles)...)}
   {}
 
-  constexpr static Style None(){ return{}; }
-  constexpr static Style Default(){ return{Font::Default}; }
+  constexpr static Style None(){ return {}; }
+  constexpr static Style Default(){ return {Font::Default}; }
 
   string defaultMod() const {
     return has(font, Font::Default) ? "0" : "";
@@ -157,13 +157,17 @@ struct Style {
     return has(font, Font::Crossed) ? "9" : "";
   }
 
-
   string bgMod() const {
-    return ((int)bg<11) ? std::to_string(40 + (int)bg -1) : "";
+    return ((int)bg<11)
+      ? ((!(int)bg) ? "0" : std::to_string(40 + (int)bg -1))
+      : "";
   }
 
   string fgMod() const {
-    return ((int)fg<11) ? std::to_string(30 + (int)fg -1) : "";
+    if (!(int)fg) return "0";
+    return ((int)fg<11)
+      ? ((!(int)bg) ? "0" : std::to_string(30 + (int)fg -1))
+      : "";
   }
 
   std::string toString() const {
@@ -189,7 +193,8 @@ Style diff(Style const& a, Style const& b = Style::None() ) {
 
   int l = (int)a.font;
   int r = (int)b.font;
-  bool reset =  (l & ~r)? 1 : 0;
+//  bool reset = (l & ~r) ? true : false;
+  bool reset = (l & ~r);
 
   return Style {
     (keepBG && !reset) ? Color::Inherit : b.bg,
