@@ -157,13 +157,17 @@ struct Style {
     return has(font, Font::Crossed) ? "9" : "";
   }
 
-
   string bgMod() const {
-    return ((int)bg<11) ? std::to_string(40 + (int)bg -1) : "";
+    return ((int)bg<11)
+      ? ((!(int)bg) ? "0" : std::to_string(40 + (int)bg -1))
+      : "";
   }
 
   string fgMod() const {
-    return ((int)fg<11) ? std::to_string(30 + (int)fg -1) : "";
+    if (!(int)fg) return "0";
+    return ((int)fg<11)
+      ? ((!(int)bg) ? "0" : std::to_string(30 + (int)fg -1))
+      : "";
   }
 
   std::string toString() const {
