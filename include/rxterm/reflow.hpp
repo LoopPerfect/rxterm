@@ -9,7 +9,7 @@ std::string reflow(unsigned const& width, std::string const& s) {
   if (s.size() <= width) { return s; }
 
   std::string content = "";
-  auto b = 0;
+  size_t b = 0;
   while (b < s.size()) {
     auto t = s.substr(b, width+1)
       .find_last_of("\n\t.,!?:;- ");

@@ -199,7 +199,9 @@ Style diff(Style const& a, Style const& b = Style::None() ) {
   return Style {
     (keepBG && !reset) ? Color::Inherit : b.bg,
     (keepFG && !reset) ? FontColor::Inherit : b.fg,
-    (keepFont && !reset) ? Font::Inherit : (Font)((r&((l&r)^r))|reset)
+    (keepFont && !reset) ? 
+    Font::Inherit : 
+      (Font)((r&((l&r)^r))|(static_cast<int>(reset)))
   };
 }
 
