@@ -40,12 +40,12 @@ struct Image {
 
 
 
-  Pixel const& operator()(int x, int y)const {
+  Pixel const& operator()(unsigned int x, unsigned int y)const {
     return pixels[y*width+x];
   }
 
 
-  Pixel& operator()(int x, int y) {
+  Pixel& operator()(unsigned int x, unsigned int y) {
     return pixels[y*width+x];
   }
 
@@ -54,8 +54,8 @@ struct Image {
     std::string str = "";
 
     auto prev = Style{};
-    for (int y=0; y < height; ++y) {
-      for (int x=0; x < width; ++x) {
+    for (unsigned int y=0; y < height; ++y) {
+      for (unsigned int x=0; x < width; ++x) {
         auto const& pixel = (*this)(x, y);
         auto const current = diff(prev, pixel.c ? pixel.style : Style::Default());
         char c = pixel.c ? pixel.c : ' ';
@@ -75,8 +75,8 @@ struct Sprite {
 };
 
 Image drawOnBackground(Image canvas, unsigned const& sx, unsigned const& sy, Image const& fg) {
-  for (int y=0; y < fg.height; ++y) {
-    for (int x=0; x < fg.width; ++x) {
+  for (unsigned int y=0; y < fg.height; ++y) {
+    for (unsigned int x=0; x < fg.width; ++x) {
       auto& p = canvas(
         clip(sx+x, 0u, canvas.width), 
         clip(sy+y, 0u, canvas.height)

@@ -31,7 +31,7 @@ struct Progress {
     return drawOnBackground(
       Image::create(width, 1, bg),
       0, 0,
-      Image::create(width*p, 1, fg));
+      Image::create(static_cast<unsigned int>(width*p), 1, fg));
   }
 };
 
