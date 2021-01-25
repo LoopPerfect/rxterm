@@ -35,7 +35,16 @@ enum class FontColor {
   White = 8,
   Default = 9,
   Transparent = 10,
-  Inherit = 11
+  Inherit = 11,
+
+  BrightBlack = Black+60,
+  BrightRed = Red+60,
+  BrightGreen = Green+60,
+  BrightYellow = Yellow+60,
+  BrightBlue = Blue+60,
+  BrightMagenta = Magenta+60,
+  BrightCyan = Cyan+60,
+  BrightWhite = White+60
 };
 
 
@@ -51,7 +60,16 @@ enum class Color {
   White = 8,
   Default = 9,
   Transparent = 10,
-  Inherit = 11
+  Inherit = 11,
+
+  BrightBlack = Black+60,
+  BrightRed = Red+60,
+  BrightGreen = Green+60,
+  BrightYellow = Yellow+60,
+  BrightBlue = Blue+60,
+  BrightMagenta = Magenta+60,
+  BrightCyan = Cyan+60,
+  BrightWhite = White+60
 };
 
 
@@ -158,14 +176,14 @@ struct Style {
   }
 
   string bgMod() const {
-    return ((int)bg<11)
+    return ((int)bg != 11)
       ? ((!(int)bg) ? "0" : std::to_string(40 + (int)bg -1))
       : "";
   }
 
   string fgMod() const {
     if (!(int)fg) return "0";
-    return ((int)fg<11)
+    return ((int)fg != 11)
       ? ((!(int)bg) ? "0" : std::to_string(30 + (int)fg -1))
       : "";
   }
