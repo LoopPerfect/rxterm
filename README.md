@@ -9,6 +9,8 @@ A C++ library for functional-reactive terminals. RxTerm is a lean alternative to
 
 The library builds with [Buckaroo](https://buckaroo.pm) and either [Buck](https://www.buckbuild.com) or [Bazel](https://bazel.build). It requires a C++ 14 compiler.
 
+### Buckaroo
+
 ```bash
 buckaroo install
 
@@ -17,8 +19,10 @@ buck build :rxterm
 
 # Bazel
 bazel build :rxterm
+```
 
-# CMake
+### CMake
+```bash
 mkdir build
 cd build
 cmake ..
