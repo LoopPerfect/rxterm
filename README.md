@@ -17,6 +17,12 @@ buck build :rxterm
 
 # Bazel
 bazel build :rxterm
+
+# CMake
+mkdir build
+cd build
+cmake ..
+make
 ```
 
 To run the demo:
@@ -27,6 +33,10 @@ buck run :main
 
 # Bazel
 BAZEL_CXXOPTS="-std=c++14" bazel run :main
+
+# CMake (inside the build dir)
+cd apps/
+./rxterm-demo
 ```
 
 
